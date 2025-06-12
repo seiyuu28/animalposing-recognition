@@ -46,8 +46,15 @@ def train_model(X, y):
         tf.keras.layers.Dense(64, activation='relu'),
         tf.keras.layers.Dense(y_cat.shape[1], activation='softmax')
     ])
-    model.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
-    model.save('pose_model.h5')
+    model.compile(
+        optimizer="adam",
+        loss="categorical_crossentropy",
+        metrics=["accuracy"],
+    )
+
+    # train for a few epochs before saving
+    model.fit(X, y_cat, epochs=10, batch_size=16)
+    model.save("pose_model.h5")
 
     with open('label_map.csv', 'w') as f:
         for idx, name in enumerate(le.classes_):

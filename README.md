@@ -5,15 +5,21 @@ This repository contains an example script for collecting pose data using [Media
 ## Requirements
 
 - Python 3
-- OpenCV (`opencv-python`)
-- MediaPipe
-- TensorFlow
-- scikit-learn
+- [OpenCV](https://pypi.org/project/opencv-python/)
+- [MediaPipe](https://pypi.org/project/mediapipe/)
+- [TensorFlow](https://www.tensorflow.org/)
+- [scikit-learn](https://scikit-learn.org/)
+
+Install dependencies via pip:
+
+```bash
+pip install -r requirements.txt
+```
 
 ## Usage
 
 1. Install the above dependencies.
-2. Run the script and input a label name for the capture session when prompted. Press `q` to stop capturing frames.
+2. Run the script. You will be prompted for a label name for the capture session. Press `q` to stop capturing frames. After capturing, the model is trained automatically.
 
 ```bash
 python3 pose_trainer.py
