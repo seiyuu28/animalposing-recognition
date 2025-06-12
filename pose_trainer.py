@@ -1,5 +1,5 @@
 import cv2
-import mediapipe as mp
+from mmpose.apis import MMPoseInferencer
 import numpy as np
 import tensorflow as tf
 from sklearn.preprocessing import LabelEncoder
@@ -7,8 +7,7 @@ from tensorflow.keras.utils import to_categorical
 
 
 def capture_pose(label, max_frames=200):
-    mp_pose = mp.solutions.pose
-    pose = mp_pose.Pose()
+    inferencer = MMPoseInferencer(pose2d='human')
     cap = cv2.VideoCapture(0)
 
     data = []
@@ -18,12 +17,11 @@ def capture_pose(label, max_frames=200):
         ret, frame = cap.read()
         if not ret:
             break
-        image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        results = pose.process(image)
-        if results.pose_landmarks:
-            row = []
-            for lm in results.pose_landmarks.landmark:
-                row.extend([lm.x, lm.y, lm.z])
+        result = next(inferencer(frame, return_vis=False))
+        preds = result.get('predictions', [])
+        if preds:
+            keypoints = preds[0]['keypoints']
+            row = keypoints.flatten().tolist()
             data.append(row)
             count += 1
         cv2.imshow('Pose', frame)
