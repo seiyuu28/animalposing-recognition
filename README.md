@@ -1,12 +1,12 @@
 # animalTOYONAKA
 
-This repository contains an example script for collecting pose data using [MediaPipe](https://github.com/google/mediapipe) and training a simple neural network with TensorFlow.
+This repository contains an example script for collecting pose data using [MMPose](https://github.com/open-mmlab/mmpose) and training a simple neural network with TensorFlow.
 
 ## Requirements
 
 - Python 3
 - [OpenCV](https://pypi.org/project/opencv-python/)
-- [MediaPipe](https://pypi.org/project/mediapipe/)
+- [MMPose](https://github.com/open-mmlab/mmpose)
 - [TensorFlow](https://www.tensorflow.org/)
 - [scikit-learn](https://scikit-learn.org/)
 
