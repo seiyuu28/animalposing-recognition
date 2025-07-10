@@ -1,4 +1,4 @@
-# animalTOYONAKA
+# animalposing-recognition
 
 This repository contains an example script for collecting pose data using [MediaPipe](https://github.com/google/mediapipe) and training a simple neural network with TensorFlow.
 
