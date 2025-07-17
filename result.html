@@ -1,0 +1,56 @@
+<!-- result.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>推論結果</title>
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: #000;
+      color: #00ffcc;
+      text-align: center;
+      padding: 20px;
+    }
+    .result {
+      font-size: 1.5rem;
+      margin-top: 20px;
+      text-shadow: 0 0 5px #00ffcc;
+    }
+    .back-btn {
+      margin-top: 30px;
+      padding: 10px 20px;
+      background: #00cccc;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .back-btn:hover {
+      background: #00ffff;
+    }
+  </style>
+</head>
+<body>
+  <h1>推論結果</h1>
+  <div class="result" id="result"></div>
+  <button class="back-btn" onclick="goBack()">もう一度撮影する</button>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const animal = params.get('animal');
+    const score = params.get('score');
+
+    if (animal && score) {
+      document.getElementById('result').textContent = 
+        `最も近い動物: ${animal}　適合率: ${(parseFloat(score) * 100).toFixed(2)}%`;
+    } else {
+      document.getElementById('result').textContent = '結果情報がありません。';
+    }
+
+    function goBack() {
+      window.location.href = '/map.html';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!-- map.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>アニマル豊中マップ</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      background-image: url('./background.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .map-container {
+      position: relative;
+      width: 100%;
+      max-width: 1000px;
+      margin: 2rem auto;
+      border: 8px solid #fff;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      border-radius: 16px;
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .map-container img {
+      width: 100%;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .hotspot {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      background: rgba(255, 153, 0, 0.85); /* オレンジ系でポップに */
+      color: #fff;
+      font-size: 1.5rem;
+      border: 3px solid #fff;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
+    }
+
+    .hotspot:hover {
+      transform: scale(1.2);
+      background: rgba(255, 120, 0, 0.95);
+    }
+  </style>
+</head>
+<body>
+  <div class="map-container" id="mapContainer">
+    <h1>？をクリックして動物を探してみよう！</h1>
+    <img src="./animalmap.jpg" alt="アニマル豊中マップ">
+  </div>
+
+  <script>
+    // 任意の座標を配列で設定
+    const coords = [
+      { top:'20%', left:'35%', link: 'interface1.html' },
+      { top:'30%', left:'42%' , link: 'interface2.html'},
+      { top:'32%', left:'70%' , link: 'interface3.html'},
+      { top:'25%', left:'60%' , link: 'interface4.html'},
+      { top:'55%', left:'30%' , link: 'interface5.html'},
+      { top:'55%', left:'75%' , link: 'interface6.html'},
+      { top:'70%', left:'80%' , link: 'interface7.html'}
+    ];
+    const mapContainer = document.getElementById('mapContainer');
+    // 各ホットスポットを生成し、クリックで推論ページへ
+    coords.forEach(pos => {
+      const btn = document.createElement('button');
+      btn.className = 'hotspot'; btn.textContent = '?';
+      btn.style.top = pos.top; btn.style.left = pos.left;
+      btn.style.position = 'absolute';
+      btn.addEventListener('click', () => location.href= pos.link);
+      mapContainer.appendChild(btn);
+    });
+  </script>
+</body>
+</html>

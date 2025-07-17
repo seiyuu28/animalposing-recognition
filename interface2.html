@@ -1,0 +1,191 @@
+<!-- inference.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>画像推論ページ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(180deg, #000000, #1a1a1a);
+      color: #00ffcc;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      color: #00ffcc;
+      margin-bottom: 10px;
+    }
+
+    .instruction {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: #cccccc;
+      animation: fadeIn 2s ease-in-out, blink 1.5s step-end infinite alternate;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes blink {
+      from { opacity: 1; }
+      to   { opacity: 0.6; }
+    }
+
+    .hint-container {
+      position: absolute;
+      top: 120px;
+      right: 400px;
+      text-align: center;
+    }
+
+    .hint-label {
+      font-size: 0.9rem;
+      color: #00ffff;
+      margin-bottom: 4px;
+    }
+
+    .hint-image {
+      max-width: 200px;
+      width: 200%;
+      height: auto;
+      border-radius: 6px;
+      box-shadow: 0 0 8px #00ffcc;
+    }
+
+    .pose-image {
+      max-width: 300px;
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 0 12px #00ffcc;
+      margin-bottom: 20px;
+    }
+
+    video {
+      width: 320px;
+      height: 240px;
+      border: 2px solid #00ffcc;
+      box-shadow: 0 0 10px #00ffcc;
+      border-radius: 8px;
+    }
+
+    canvas {
+      display: none;
+    }
+
+    #photo {
+      margin-top: 10px;
+      max-width: 320px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px #00cccc;
+    }
+
+    .btn {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      background-color: #00cccc;
+      color: #000000;
+      box-shadow: 0 0 8px #00cccc;
+      transition: all 0.3s;
+    }
+
+    .btn:disabled {
+      background-color: #555;
+      color: #999;
+      box-shadow: none;
+    }
+
+    .btn:hover:enabled {
+      background-color: #00ffff;
+      transform: scale(1.05);
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      color: #ffffff;
+      text-shadow: 0 0 5px #00ffcc;
+    }
+  </style>
+</head>
+<body>
+  <h1>モデル推論ページ</h1>
+  <p class="instruction">いぬのポーズをとると説明が表示されます</p>
+
+  <img src="./dog_shado.jpg" alt="ポーズのヒント画像" class="pose-image">
+
+  <div class="hint-container">
+    <div class="hint-label">ヒント</div>
+    <img src="./dog_hint.jpg" alt="追加ヒント画像" class="hint-image">
+  </div>
+
+  <div>
+    <video id="video" autoplay playsinline></video>
+    <canvas id="canvas" width="320" height="240"></canvas>
+  </div>
+  <div>
+    <button class="btn" id="capture">写真を撮る</button>
+    <button class="btn" id="predict" disabled>推論実行</button>
+  </div>
+  <img id="photo" alt="撮影画像" />
+  <div id="result"></div>
+
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const photo = document.getElementById('photo');
+    const captureBtn = document.getElementById('capture');
+    const predictBtn = document.getElementById('predict');
+    const resultDiv = document.getElementById('result');
+
+    // カメラ起動
+    navigator.mediaDevices.getUserMedia({ video:true })
+      .then(stream => video.srcObject = stream)
+      .catch(err => alert('カメラを起動できません: ' + err));
+
+    // 写真を撮る
+    captureBtn.addEventListener('click', () => {
+      canvas.getContext('2d').drawImage(video,0,0,canvas.width,canvas.height);
+      const dataURL = canvas.toDataURL('image/png');
+      photo.src = dataURL;
+      predictBtn.disabled = false;
+    });
+
+    // 推論実行
+    predictBtn.addEventListener('click', () => {
+  resultDiv.textContent = '推論中...';
+  fetch('/api/predict', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ image: photo.src })
+  })
+  .then(res => res.json())
+  .then(json => {
+    if (json.error) {
+      resultDiv.textContent = 'エラー: ' + json.error;
+    } else {
+      // 全結果を高い順に表示
+      resultDiv.innerHTML = json.results.map(r =>
+        `${r.label}: ${(r.score * 100).toFixed(1)}%`
+      ).join('<br>');
+    }
+  })
+  .catch(err => {
+    resultDiv.textContent = 'エラー: ' + err;
+  });
+});
+  </script>
+</body>
+</html>

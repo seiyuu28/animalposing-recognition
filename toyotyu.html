@@ -1,0 +1,54 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>アニマル豊中</title>
+  <style>
+    body, html { margin:0; padding:0; height:100%; }
+    .start-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(45deg, #ff4081, #ffeb3b, #2196f3, #4caf50);
+      background-size: 400% 400%;
+      animation: gradientBG 10s ease infinite;
+      font-family: 'Arial', sans-serif;
+      color: #fff;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .start-button {
+      margin-top: 20px;
+      padding: 20px 40px;
+      font-size: 2rem;
+      background-color: rgba(0,0,0,0.5);
+      border: 3px solid #fff;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .start-button:hover { transform: scale(1.1); }
+  </style>
+</head>
+<body>
+  <div class="start-screen">
+    <h1>アニマル豊中へようこそ！</h1>
+    <button class="start-button" onclick="location.href='map.html'">スタート</button>
+  </div>
+</body>
+</html>
+
+
+
+index.html  ホーム画面
+map.html マップ画面
+interface.html マップの?をクリックした後に遷移するページ。写真をしているけど、その写真をどうするかはよくわかっていない。
+
+animalmap.jpg と proposal.pngを同じファイル内に入れておかないと動かないと思う
